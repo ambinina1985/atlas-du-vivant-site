@@ -44,6 +44,17 @@ T = {
    ("Enfants", "L’application ne collecte aucune donnée personnelle, y compris auprès des enfants."),
    ("Contact", "Pour toute question relative à la confidentialité, utilisez la page Assistance."),
   ],
+  "terms_title": "Conditions d’utilisation",
+  "terms_label": "Conditions",
+  "terms": [
+   ("Contrat de licence", "L’utilisation de L’Atlas du Vivant est régie par le contrat de licence d’utilisateur final standard d’Apple (EULA) : <a href=\"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\">EULA</a>."),
+   ("Abonnements Premium", "Premium est proposé en abonnement mensuel (1 mois) ou annuel (1 an) à renouvellement automatique, ainsi qu’en achat unique à vie. Le prix applicable est affiché dans l’app avant l’achat, dans la devise de votre pays."),
+   ("Paiement et renouvellement", "Le paiement est débité sur votre compte Apple à la confirmation de l’achat. L’abonnement se renouvelle automatiquement au même prix et pour la même durée, sauf annulation au moins 24 heures avant la fin de la période en cours. Le compte est débité du renouvellement dans les 24 heures précédant la fin de la période."),
+   ("Gestion et annulation", "Gérez ou annulez votre abonnement à tout moment dans l’app (Profil › Premium › Gérer l’abonnement) ou dans Réglages › [votre nom] › Abonnements. L’annulation prend effet à la fin de la période déjà payée."),
+   ("Après l’abonnement", "Les espèces déjà découvertes restent accessibles dans votre collection, même si l’abonnement prend fin."),
+   ("Remboursements", "Les remboursements sont gérés par Apple : reportaproblem.apple.com."),
+   ("Confidentialité", "Voir notre <a href=\"privacy.html\">politique de confidentialité</a>."),
+  ],
   "footer_photo": "Photo : renard polaire par Jonatan Pie (CC0), via Wikimedia Commons.",
  },
  "en": {
@@ -83,6 +94,17 @@ T = {
    ("Children", "The app collects no personal data, including from children."),
    ("Contact", "For any privacy question, please use the Support page."),
   ],
+  "terms_title": "Terms of Use",
+  "terms_label": "Terms",
+  "terms": [
+   ("License agreement", "Use of The Living Atlas is governed by Apple’s standard Licensed Application End User License Agreement (EULA): <a href=\"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\">EULA</a>."),
+   ("Premium subscriptions", "Premium is offered as an auto-renewable monthly (1 month) or yearly (1 year) subscription, and as a one-time lifetime purchase. The applicable price is shown in the app before purchase, in your local currency."),
+   ("Payment and renewal", "Payment is charged to your Apple Account at confirmation of purchase. The subscription renews automatically at the same price and duration unless cancelled at least 24 hours before the end of the current period. Your account is charged for renewal within 24 hours prior to the end of the current period."),
+   ("Managing and cancelling", "Manage or cancel your subscription at any time in the app (Profile › Premium › Manage subscription) or in Settings › [your name] › Subscriptions. Cancellation takes effect at the end of the period already paid."),
+   ("After your subscription", "Species you have already discovered stay in your collection even if your subscription ends."),
+   ("Refunds", "Refunds are handled by Apple: reportaproblem.apple.com."),
+   ("Privacy", "See our <a href=\"privacy-en.html\">Privacy Policy</a>."),
+  ],
   "footer_photo": "Photo: arctic fox by Jonatan Pie (CC0), via Wikimedia Commons.",
  },
 }
@@ -92,7 +114,7 @@ def page(lang, slug, title, body, hero=False):
     suffix = "" if lang == "fr" else "-en"
     other_suffix = "-en" if lang == "fr" else ""
     home = "index.html" if lang == "fr" else "index-en.html"
-    other_page = {"index": "index", "support": "support", "privacy": "privacy"}[slug] + other_suffix + ".html"
+    other_page = {"index": "index", "support": "support", "privacy": "privacy", "terms": "terms"}[slug] + other_suffix + ".html"
     hero_html = ""
     if hero:
         hero_html = f'''<section class="hero"><div class="wrap">
@@ -114,14 +136,14 @@ def page(lang, slug, title, body, hero=False):
 <header class="top"><div class="wrap">
 <img src="assets/icon.png" alt="">
 <a class="name" href="{home}">{t["name"]}</a>
-<nav><a href="support{suffix}.html">{t["nav"][0]}</a><a href="privacy{suffix}.html">{t["nav"][1]}</a><a class="lang" href="{other_page}" hreflang="{t["other"]}">{t["otherLabel"]}</a></nav>
+<nav><a href="support{suffix}.html">{t["nav"][0]}</a><a href="privacy{suffix}.html">{t["nav"][1]}</a><a href="terms{suffix}.html">{t["terms_label"]}</a><a class="lang" href="{other_page}" hreflang="{t["other"]}">{t["otherLabel"]}</a></nav>
 </div></header>
 {hero_html}
 <main><div class="wrap">
 {body}
 </div></main>
 <footer><div class="wrap">
-<a href="support{suffix}.html">{t["nav"][0]}</a><a href="privacy{suffix}.html">{t["nav"][1]}</a>
+<a href="support{suffix}.html">{t["nav"][0]}</a><a href="privacy{suffix}.html">{t["nav"][1]}</a><a href="terms{suffix}.html">{t["terms_title"]}</a>
 <p>{t["footer_photo"]}</p>
 </div></footer>
 </body>
@@ -145,4 +167,7 @@ for lang, t in T.items():
     sections = "".join(f'<h2>{h}</h2><p>{p}</p>' for h, p in t["privacy"])
     privacy_body = f'<h1>{t["privacy_title"]}</h1><p class="muted">{t["privacy_updated"]}</p>{sections}'
     open(os.path.join(HERE, f"privacy{suffix}.html"), "w").write(page(lang, "privacy", t["privacy_title"], privacy_body))
+    terms = "".join(f'<h2>{h}</h2><p>{p}</p>' for h, p in t["terms"])
+    terms_body = f'<h1>{t["terms_title"]}</h1><p class="muted">{t["privacy_updated"]}</p>{terms}'
+    open(os.path.join(HERE, f"terms{suffix}.html"), "w").write(page(lang, "terms", t["terms_title"], terms_body))
 print("built")
